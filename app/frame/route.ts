@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateAndStoreWorkflow } from "@/lib/workflow";
+import { getPublicBaseUrl } from "@/lib/env";
 
 export const runtime = "nodejs";
 
 const MICRO_TIP_VALUE = "0.0005";
-const BASE_URL =
-  process.env.NEXT_PUBLIC_FLOWCASTER_BASE_URL ?? "http://localhost:3000";
+const BASE_URL = getPublicBaseUrl();
 const DEFAULT_IMAGE = `${BASE_URL}/frame/image?title=Flowcaster&subtitle=Describe+automation+%E2%86%92+get+n8n+workflow`;
 const BASE_TIP_ADDRESS =
   process.env.BASE_TIP_ADDRESS ??

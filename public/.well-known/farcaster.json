@@ -2,13 +2,13 @@
   "id": "flowcaster",
   "name": "Flowcaster",
   "description": "Generate and view custom n8n automations using natural language.",
-  "iconUrl": "https://flowcaster-ljnjvinir-gurayds-projects.vercel.app/icon.png",
-  "websiteUrl": "https://flowcaster-ljnjvinir-gurayds-projects.vercel.app",
+  "iconUrl": "https://flowcaster.vercel.app/icon.png",
+  "websiteUrl": "https://flowcaster.vercel.app",
   "navigation": {
-    "home": "https://flowcaster-ljnjvinir-gurayds-projects.vercel.app/frame"
+    "home": "https://flowcaster.vercel.app/frame"
   },
   "developer": {
     "name": "Flowcaster",
-    "url": "https://flowcaster-ljnjvinir-gurayds-projects.vercel.app"
+    "url": "https://flowcaster.vercel.app"
   }
 }

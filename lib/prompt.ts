@@ -98,7 +98,18 @@ Remember:
 
 const DEFAULT_MODEL = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
 
-export function buildWorkflowPrompt(input: string) {
+export type PromptMessage = {
+  role: "system" | "user" | "assistant";
+  content: string;
+};
+
+export type PromptPayload = {
+  model: string;
+  messages: PromptMessage[];
+  temperature: number;
+};
+
+export function buildWorkflowPrompt(input: string): PromptPayload {
   return {
     model: DEFAULT_MODEL,
     messages: [
@@ -109,7 +120,10 @@ export function buildWorkflowPrompt(input: string) {
   };
 }
 
-export function buildRepairPrompt(rawJson: string, errorMessage: string) {
+export function buildRepairPrompt(
+  rawJson: string,
+  errorMessage: string,
+): PromptPayload {
   const repairUserPrompt = `
 The previous response was supposed to be a valid n8n workflow JSON object,
 but it failed validation with the following error:

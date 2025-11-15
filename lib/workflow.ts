@@ -70,10 +70,10 @@ export async function generateWorkflowFromPrompt(
     throw new Error("OpenAI client is not available");
   }
 
-  const baseMessages = buildWorkflowPrompt(userPrompt);
+  const basePrompt = buildWorkflowPrompt(userPrompt);
   let attempt = 0;
   let lastError: WorkflowValidationError | Error | null = null;
-  let transcript = convertMessages(baseMessages);
+  let transcript = convertMessages(basePrompt.messages);
   let lastRaw = "";
 
   while (attempt < maxAttempts) {
@@ -99,14 +99,11 @@ export async function generateWorkflowFromPrompt(
       lastError = new Error(
         `The model returned invalid JSON. ${error instanceof Error ? error.message : ""}`.trim(),
       );
-        transcript = convertMessages(
-          buildRepairPrompt({
-            userPrompt,
-            previousOutput: lastRaw,
-            issueReport:
-              "JSON parse error. Ensure you return a single valid JSON object without trailing commas.",
-          }),
-        );
+      const repairPrompt = buildRepairPrompt(
+        lastRaw,
+        "JSON parse error. Ensure you return a single valid JSON object without trailing commas.",
+      );
+      transcript = convertMessages(repairPrompt.messages);
       attempt += 1;
       continue;
     }
@@ -123,13 +120,8 @@ export async function generateWorkflowFromPrompt(
       if (error instanceof WorkflowValidationError) {
         lastError = error;
         const issueReport = formatIssues(error.issues);
-        transcript = convertMessages(
-          buildRepairPrompt({
-            userPrompt,
-            previousOutput: lastRaw,
-            issueReport,
-          }),
-        );
+        const repairPrompt = buildRepairPrompt(lastRaw, issueReport);
+        transcript = convertMessages(repairPrompt.messages);
         attempt += 1;
         continue;
       }

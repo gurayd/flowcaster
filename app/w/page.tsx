@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 type WorkflowResponse = {
@@ -15,6 +15,21 @@ type FetchState = {
 };
 
 export default function WorkflowPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="mx-auto flex max-w-3xl flex-col gap-2 p-6">
+          <h1 className="text-2xl font-semibold">Loading flow…</h1>
+          <p className="text-sm text-gray-600">Fetching workflow details.</p>
+        </main>
+      }
+    >
+      <WorkflowPageContent />
+    </Suspense>
+  );
+}
+
+function WorkflowPageContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id")?.trim() ?? "";
 

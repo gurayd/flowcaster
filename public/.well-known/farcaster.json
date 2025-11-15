@@ -1,14 +1,14 @@
 {
-  "id": "flowcaster",
-  "name": "Flowcaster",
-  "description": "Generate and view custom n8n automations using natural language.",
-  "iconUrl": "https://flowcaster.vercel.app/icon.png",
-  "websiteUrl": "https://flowcaster.vercel.app",
-  "navigation": {
-    "home": "https://flowcaster.vercel.app/frame"
-  },
-  "developer": {
+  "miniapp": {
+    "version": "1",
     "name": "Flowcaster",
-    "url": "https://flowcaster.vercel.app"
-  }
+    "homeUrl": "https://flowcaster.vercel.app/frame",
+    "iconUrl": "https://flowcaster.vercel.app/icon.png",
+    "canonicalDomain": "flowcaster.vercel.app",
+    "description": "Generate and view custom n8n automations using natural language.",
+    "requiredChains": ["eip155:8453"],
+    "tags": ["automation", "ai", "n8n"],
+    "primaryCategory": "developer-tools"
+  },
+  "accountAssociation": null
 }

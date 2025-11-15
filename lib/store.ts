@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 declare global {
-  // eslint-disable-next-line no-var
   var __FLOWCASTER_WORKFLOW_STORE: Map<string, any> | undefined;
 }
 

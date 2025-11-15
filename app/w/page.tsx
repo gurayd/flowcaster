@@ -43,14 +43,18 @@ function WorkflowPageContent() {
 
   useEffect(() => {
     if (!id) {
-      setState({ data: null, loading: false, error: null });
+      queueMicrotask(() => {
+        setState({ data: null, loading: false, error: null });
+      });
       return;
     }
 
     let cancelled = false;
     const controller = new AbortController();
 
-    setState({ data: null, loading: true, error: null });
+    queueMicrotask(() => {
+      setState({ data: null, loading: true, error: null });
+    });
 
     fetch(`/api/workflow?id=${encodeURIComponent(id)}`, {
       signal: controller.signal,

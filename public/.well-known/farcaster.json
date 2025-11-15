@@ -10,5 +10,30 @@
     "tags": ["automation", "ai", "n8n"],
     "primaryCategory": "developer-tools"
   },
-  "accountAssociation": null
+  "accountAssociation": {
+    "frame": {
+      "name": "Flowcaster",
+      "version": "1",
+      "iconUrl": "https://flowcaster.vercel.app/icon.png",
+      "homeUrl": "https://flowcaster.vercel.app",
+      "imageUrl": "https://flowcaster.vercel.app/image.png",
+      "buttonTitle": "Flowcaster",
+      "splashImageUrl": "https://flowcaster.vercel.app/splash.png",
+      "splashBackgroundColor": "#444444",
+      "webhookUrl": "https://flowcaster.vercel.app/api/webhook",
+      "subtitle": "Workflow Developer",
+      "description": "Generate and view custom n8n automations using natural language.",
+      "primaryCategory": "developer-tools",
+      "tags": [
+        "automation",
+        "n8n",
+        "ai",
+        "workflow"
+      ],
+      "tagline": "into deploy-ready n8n workflow",
+      "ogTitle": "Flowcaster-Generate Worklows",
+      "ogDescription": "Generate and view custom n8n automations using natural language.",
+      "ogImageUrl": "https://flowcaster.vercel.app/image.png"
+    }
+  }
 }

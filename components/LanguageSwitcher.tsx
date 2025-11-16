@@ -1,28 +1,39 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-const LOCALES = ["en", "es", "it", "tr", "zh", "hi"] as const;
+import { usePathname, useSearchParams } from "next/navigation";
+import { locales } from "@/i18n/config";
 
 export default function LanguageSwitcher() {
-  const path = usePathname();
-  const segments = path.split("/").filter(Boolean);
-  const firstSegment = segments[0];
-  const hasLocale = LOCALES.includes(firstSegment as typeof LOCALES[number]);
-  const currentLocale = hasLocale ? firstSegment : "en";
+  return (
+    <Suspense fallback={<div className="flex gap-2 text-sm text-zinc-500">…</div>}>
+      <LanguageSwitcherContent />
+    </Suspense>
+  );
+}
+
+function LanguageSwitcherContent() {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const segments = pathname.split("/").filter(Boolean);
+  const hasLocale = locales.includes(segments[0] as typeof locales[number]);
+  const currentLocale = hasLocale ? segments[0] : "en";
   const restSegments = hasLocale ? segments.slice(1) : segments;
-  const restPath = restSegments.join("/");
+
+  const queryString = searchParams.toString();
+  const suffix = restSegments.length ? `/${restSegments.join("/")}` : "";
+  const qs = queryString ? `?${queryString}` : "";
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      {LOCALES.map((loc) => {
-        const suffix = restPath ? `/${restPath}` : "";
-        const href = `/${loc}${suffix}`;
-        const isActive = loc === currentLocale;
+      {locales.map((locale) => {
+        const href = `/${locale}${suffix}${qs}`.replace(/\/+/g, "/");
+        const isActive = locale === currentLocale;
         return (
           <Link
-            key={loc}
+            key={locale}
             href={href}
             className={
               isActive
@@ -30,7 +41,7 @@ export default function LanguageSwitcher() {
                 : "opacity-60 transition hover:opacity-100"
             }
           >
-            {loc.toUpperCase()}
+            {locale.toUpperCase()}
           </Link>
         );
       })}

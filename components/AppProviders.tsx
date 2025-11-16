@@ -2,8 +2,11 @@
 
 import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
-import { WagmiConfig } from "wagmi";
+import { WagmiProvider } from "wagmi";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { wagmiConfig } from "@/lib/wagmi";
+
+const queryClient = new QueryClient();
 
 type AppProvidersProps = {
   children: ReactNode;
@@ -13,10 +16,12 @@ type AppProvidersProps = {
 
 export function AppProviders({ children, messages, locale }: AppProvidersProps) {
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <NextIntlClientProvider messages={messages} locale={locale}>
-        {children}
-      </NextIntlClientProvider>
-    </WagmiConfig>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          {children}
+        </NextIntlClientProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }

@@ -7,7 +7,7 @@
     "submit": "Generate Flow",
     "description": "Use the form to turn natural language into deploy-ready n8n JSON.",
     "mockToggle": "Mock OpenAI call (useful without API key)",
-    "tipLink": "Send micro-tip on Base →",
+    "tipLabel": "Send tip via Base",
     "loading": "Generating…",
     "viewJson": "View JSON",
     "promptIdeas": "Prompt ideas",
@@ -24,7 +24,15 @@
       "Every morning at 8am fetch the day's weather and save it to Notion.",
       "Listen for a new Farcaster cast mentioning Flowcaster, then post a GM reply.",
       "When a new Shopify order contains VIP tag, DM me the details on Telegram."
-    ]
+    ],
+    "librarySuggestion": {
+      "title": "We found a ready-made workflow that might match your request.",
+      "description": "Use a vetted Flowcaster template or continue with a freshly generated one.",
+      "useExisting": "Use existing flow",
+      "generateNew": "Generate new flow",
+      "loadingExisting": "Fetching workflow...",
+      "searching": "Searching library..."
+    }
   },
   "viewer": {
     "loading": "Loading workflow...",

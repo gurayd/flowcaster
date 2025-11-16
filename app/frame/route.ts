@@ -4,15 +4,15 @@ import { getPublicBaseUrl } from "@/lib/env";
 
 export const runtime = "nodejs";
 
-const MICRO_TIP_VALUE = "0.0005";
+const TIP_VALUE = "0.0005";
 const BASE_URL = getPublicBaseUrl();
 const DEFAULT_IMAGE = `${BASE_URL}/frame/image?title=Flowcaster&subtitle=Describe+automation+%E2%86%92+get+n8n+workflow`;
 const BASE_TIP_ADDRESS =
   process.env.BASE_TIP_ADDRESS ??
-  "0x0000000000000000000000000000000000000000";
+  "0x86796a14774d06e18f5cb1c67c97f578e30bba02";
 const TIP_URL = `https://pay.base.org/?to=${encodeURIComponent(
-  BASE_TIP_ADDRESS,
-)}&chain=base&value=${MICRO_TIP_VALUE}`;
+  BASE_TIP_ADDRESS || "0x86796a14774d06e18f5cb1c67c97f578e30bba02",
+)}&chain=base&value=${TIP_VALUE}`;
 const HTML_HEADERS = {
   "Content-Type": "text/html; charset=utf-8",
   "Cache-Control": "public, max-age=15",
@@ -96,7 +96,7 @@ function renderInitialFrame(subtitle?: string) {
     <meta property="fc:frame:input:text" content="Describe your automation" />
     <meta property="fc:frame:button:1" content="Generate flow" />
     <meta property="fc:frame:button:1:action" content="post" />
-    <meta property="fc:frame:button:2" content="Tip 0.0005" />
+    <meta property="fc:frame:button:2" content="Tip via Base" />
     <meta property="fc:frame:button:2:action" content="link" />
     <meta property="fc:frame:button:2:target" content="${escapeHtml(TIP_URL)}" />
   </head>
@@ -124,7 +124,7 @@ function renderSuccessFrame(params: {
     <meta property="fc:frame:button:1:target" content="${escapeHtml(
       params.flowUrl,
     )}" />
-    <meta property="fc:frame:button:2" content="Tip 0.0005" />
+    <meta property="fc:frame:button:2" content="Tip via Base" />
     <meta property="fc:frame:button:2:action" content="link" />
     <meta property="fc:frame:button:2:target" content="${escapeHtml(TIP_URL)}" />
   </head>

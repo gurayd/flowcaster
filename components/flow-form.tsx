@@ -1,8 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { N8nWorkflow } from "@/lib/schema";
 import { useTranslations } from "next-intl";
+import { usePathname, useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const BaseTipButton = dynamic(
+  () => import("@/components/BaseTipButton").then((mod) => mod.BaseTipButton),
+  { ssr: false },
+);
 
 const defaultMock = process.env.NEXT_PUBLIC_FLOWCASTER_MOCK === "true";
 
@@ -11,35 +18,64 @@ type GenerateStatus = {
   mocked?: boolean;
 };
 
+type LibraryHit = {
+  id: string;
+  name: string;
+  description?: string;
+  githubPath: string;
+  tags?: string[];
+  score: number;
+};
+
 export function FlowForm() {
   const t = useTranslations();
+  const router = useRouter();
+  const pathname = usePathname();
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [workflow, setWorkflow] = useState<N8nWorkflow | null>(null);
   const [status, setStatus] = useState<GenerateStatus | null>(null);
   const [raw, setRaw] = useState<string | null>(null);
-  const [tipUrl, setTipUrl] = useState<string | null>(null);
   const [mock, setMock] = useState(defaultMock);
-
-  useEffect(() => {
-    async function fetchTip() {
-      try {
-        const response = await fetch("/api/tip-intent");
-        if (!response.ok) return;
-        const data = await response.json();
-        setTipUrl(data.url);
-      } catch {
-        // ignore missing tip config in dev
-      }
-    }
-    fetchTip();
-  }, []);
+  const [libraryHit, setLibraryHit] = useState<LibraryHit | null>(null);
+  const [isSearchingLibrary, setIsSearchingLibrary] = useState(false);
+  const [useLibraryLoading, setUseLibraryLoading] = useState(false);
 
   const suggestions = useMemo(() => {
     const raw = t.raw("form.suggestions");
     return Array.isArray(raw) ? (raw as string[]) : [];
   }, [t]);
+
+
+  const runGeneration = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    setWorkflow(null);
+    setStatus(null);
+    setRaw(null);
+
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, mock }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error ?? t("form.errors.unexpected"));
+      }
+
+      setWorkflow(data.workflow);
+      setStatus(data.status ?? null);
+      setRaw(data.raw ?? null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("form.errors.unexpected"));
+    } finally {
+      setLoading(false);
+    }
+  }, [mock, prompt, t]);
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
@@ -48,34 +84,34 @@ export function FlowForm() {
         setError(t("form.errors.promptRequired"));
         return;
       }
-      setLoading(true);
+      setLibraryHit(null);
+      setIsSearchingLibrary(true);
       setError(null);
-      setWorkflow(null);
-      setStatus(null);
-      setRaw(null);
 
       try {
-        const response = await fetch("/api/generate", {
+        const response = await fetch("/api/library-search", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, mock }),
+          body: JSON.stringify({ prompt }),
         });
-
         const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.error ?? t("form.errors.unexpected"));
+        if (response.ok && Array.isArray(data.hits) && data.hits.length > 0) {
+          const [best] = data.hits as LibraryHit[];
+          if (best.score > 0) {
+            setLibraryHit(best);
+            setIsSearchingLibrary(false);
+            return;
+          }
         }
-
-        setWorkflow(data.workflow);
-        setStatus(data.status ?? null);
-        setRaw(data.raw ?? null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : t("form.errors.unexpected"));
+        console.warn("Library search failed", err);
       } finally {
-        setLoading(false);
+        setIsSearchingLibrary(false);
       }
+
+      await runGeneration();
     },
-    [prompt, mock, t],
+    [prompt, runGeneration, t],
   );
 
   const helperText = useMemo(() => {
@@ -126,24 +162,19 @@ export function FlowForm() {
             />
             <span>{t("form.mockToggle")}</span>
           </label>
-          {tipUrl ? (
-            <a
-              href={tipUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 font-medium text-indigo-600 hover:underline"
-            >
-              {t("form.tipLink")}
-            </a>
-          ) : null}
+          <BaseTipButton />
         </div>
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || isSearchingLibrary}
           className="inline-flex w-full items-center justify-center rounded-2xl bg-indigo-600 px-4 py-3 text-base font-semibold text-white shadow-lg shadow-indigo-600/30 transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
         >
-          {loading ? t("form.loading") : t("form.submit")}
+          {isSearchingLibrary
+            ? t("form.librarySuggestion.searching")
+            : loading
+              ? t("form.loading")
+              : t("form.submit")}
         </button>
       </form>
 
@@ -174,6 +205,62 @@ export function FlowForm() {
               {raw ?? JSON.stringify(workflow, null, 2)}
             </pre>
           </details>
+        </div>
+      ) : null}
+
+      {libraryHit ? (
+        <div className="space-y-4 rounded-2xl border border-indigo-200 bg-indigo-50/60 p-4 text-sm text-zinc-800 dark:border-indigo-800 dark:bg-indigo-900/30 dark:text-zinc-100">
+          <div>
+            <p className="text-sm font-medium text-indigo-600 dark:text-indigo-300">
+              {t("form.librarySuggestion.title")}
+            </p>
+            <p className="text-sm text-zinc-600 dark:text-zinc-300">
+              {t("form.librarySuggestion.description")}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={async () => {
+                if (!libraryHit) return;
+                setUseLibraryLoading(true);
+                setError(null);
+                try {
+                  const response = await fetch(
+                    `/api/library-workflow?id=${encodeURIComponent(libraryHit.id)}`,
+                  );
+                  const data = await response.json();
+                  if (!response.ok) {
+                    throw new Error(data.error ?? t("form.errors.unexpected"));
+                  }
+                  const segments = pathname.split("/").filter(Boolean);
+                  const locale = segments[0] ?? "en";
+                  router.push(`/${locale}/w?id=${encodeURIComponent(data.id)}`);
+                } catch (err) {
+                  setError(err instanceof Error ? err.message : t("form.errors.unexpected"));
+                } finally {
+                  setUseLibraryLoading(false);
+                }
+              }}
+              disabled={useLibraryLoading}
+              className="rounded-2xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
+            >
+              {useLibraryLoading
+                ? t("form.librarySuggestion.loadingExisting")
+                : t("form.librarySuggestion.useExisting")}
+            </button>
+            <button
+              type="button"
+              onClick={async () => {
+                setLibraryHit(null);
+                setIsSearchingLibrary(false);
+                await runGeneration();
+              }}
+              className="rounded-2xl border border-zinc-300 px-4 py-2 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-200 dark:hover:bg-zinc-800"
+            >
+              {t("form.librarySuggestion.generateNew")}
+            </button>
+          </div>
         </div>
       ) : null}
 

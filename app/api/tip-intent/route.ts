@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 const MICRO_TIP_VALUE = "0.0005";
 
 export async function GET() {
-  const address = process.env.BASE_TIP_ADDRESS;
+  const address =
+    process.env.BASE_TIP_ADDRESS ??
+    "0x86796a14774d06e18f5cb1c67c97f578e30bba02";
 
   if (!address) {
     return NextResponse.json(

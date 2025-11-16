@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { getPublicBaseUrl } from "@/lib/env";
@@ -43,7 +41,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Flowcaster",
   description:
-    "Farcaster frame + web client that turns natural language into n8n workflows with Base micro tips.",
+    "Farcaster frame + web client that turns natural language into n8n workflows with Base tips.",
   metadataBase: new URL(siteUrl),
   other: {
     "fc:miniapp": miniappEmbed,
@@ -51,22 +49,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
-  const messages = await getMessages();
-
   return (
-    <html lang={locale}>
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        {children}
       </body>
     </html>
   );

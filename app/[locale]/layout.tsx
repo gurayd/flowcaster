@@ -1,8 +1,8 @@
-import { NextIntlClientProvider } from "next-intl";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { locales, type AppLocale } from "@/i18n/config";
 import type { IntlMessages } from "@/i18n/messages";
+import { AppProviders } from "@/components/AppProviders";
 
 async function loadMessages(locale: AppLocale): Promise<IntlMessages> {
   try {
@@ -32,8 +32,8 @@ export default async function LocaleLayout({
   const messages = await loadMessages(locale);
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <AppProviders locale={locale} messages={messages}>
       {children}
-    </NextIntlClientProvider>
+    </AppProviders>
   );
 }

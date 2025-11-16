@@ -7,7 +7,7 @@
     "submit": "Genera workflow",
     "description": "Usa il modulo per trasformare il linguaggio naturale in JSON pronto per n8n.",
     "mockToggle": "Simula la chiamata OpenAI (utile senza API key)",
-    "tipLink": "Invia una micro-mancia su Base →",
+    "tipLabel": "Invia una mancia su Base",
     "loading": "Generazione in corso…",
     "viewJson": "Mostra JSON",
     "promptIdeas": "Idee di prompt",
@@ -24,7 +24,15 @@
       "Ogni mattina alle 8 recupera il meteo del giorno e salvalo in Notion.",
       "Ascolta i nuovi cast su Farcaster che menzionano Flowcaster e rispondi con un GM.",
       "Quando un ordine Shopify ha il tag VIP, inviami i dettagli su Telegram."
-    ]
+    ],
+    "librarySuggestion": {
+      "title": "Abbiamo trovato un workflow pronto che potrebbe soddisfare la tua richiesta.",
+      "description": "Usa una template verificata di Flowcaster oppure genera un nuovo workflow.",
+      "useExisting": "Usa il workflow esistente",
+      "generateNew": "Genera un nuovo workflow",
+      "loadingExisting": "Caricamento del workflow...",
+      "searching": "Ricerca nella libreria..."
+    }
   },
   "viewer": {
     "loading": "Caricamento del workflow...",

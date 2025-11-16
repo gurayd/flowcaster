@@ -7,7 +7,7 @@
     "submit": "Akışı oluştur",
     "description": "Formu kullanarak doğal dili n8n için hazır JSON'a dönüştürün.",
     "mockToggle": "OpenAI çağrısını simüle et (API anahtarı olmadan kullanışlı)",
-    "tipLink": "Base üzerinden mikro bahşiş gönder →",
+    "tipLabel": "Base üzerinden bahşiş gönder",
     "loading": "Oluşturuluyor…",
     "viewJson": "JSON'u görüntüle",
     "promptIdeas": "Prompt fikirleri",
@@ -24,7 +24,15 @@
       "Her sabah 8'de günün havasını al ve Notion'a kaydet.",
       "Flowcaster'dan bahseden yeni Farcaster cast'lerini dinle ve GM yanıtı gönder.",
       "VIP etiketi taşıyan yeni Shopify siparişi geldiğinde detayları Telegram'dan bana gönder."
-    ]
+    ],
+    "librarySuggestion": {
+      "title": "İsteğinize uyabilecek hazır bir iş akışı bulduk.",
+      "description": "Onaylı Flowcaster şablonunu kullanabilir veya sıfırdan yeni bir akış oluşturabilirsiniz.",
+      "useExisting": "Mevcut akışı kullan",
+      "generateNew": "Yeni akış oluştur",
+      "loadingExisting": "Akış getiriliyor...",
+      "searching": "Kütüphane taranıyor..."
+    }
   },
   "viewer": {
     "loading": "İş akışı yükleniyor...",

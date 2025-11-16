@@ -7,7 +7,7 @@
     "submit": "生成工作流",
     "description": "使用此表单将自然语言转换成可在 n8n 中使用的 JSON。",
     "mockToggle": "模拟 OpenAI 调用（没有 API key 时很有用）",
-    "tipLink": "在 Base 上发送小额打赏 →",
+    "tipLabel": "在 Base 上打赏",
     "loading": "正在生成…",
     "viewJson": "查看 JSON",
     "promptIdeas": "提示灵感",
@@ -24,7 +24,15 @@
       "每天早上8点获取当日天气并保存到 Notion。",
       "监听提到 Flowcaster 的新 Farcaster cast，并回复一个 GM。",
       "当新的 Shopify 订单带有 VIP 标签时，把详情发到我的 Telegram。"
-    ]
+    ],
+    "librarySuggestion": {
+      "title": "我们找到一个可能符合你需求的现成工作流。",
+      "description": "可以直接使用 Flowcaster 模板，或继续生成一个全新的工作流。",
+      "useExisting": "使用现有工作流",
+      "generateNew": "生成新的工作流",
+      "loadingExisting": "正在获取工作流...",
+      "searching": "正在搜索库..."
+    }
   },
   "viewer": {
     "loading": "正在加载工作流...",

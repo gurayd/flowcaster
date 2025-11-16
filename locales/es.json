@@ -7,7 +7,7 @@
     "submit": "Generar flujo",
     "description": "Usa el formulario para convertir lenguaje natural en JSON listo para n8n.",
     "mockToggle": "Simular llamada a OpenAI (útil sin API key)",
-    "tipLink": "Enviar micropropina en Base →",
+    "tipLabel": "Enviar propina en Base",
     "loading": "Generando…",
     "viewJson": "Ver JSON",
     "promptIdeas": "Ideas de prompts",
@@ -24,7 +24,15 @@
       "Cada mañana a las 8 obtén el clima del día y guárdalo en Notion.",
       "Escucha nuevos casts de Farcaster que mencionen Flowcaster y responde con un GM.",
       "Cuando un pedido de Shopify tenga la etiqueta VIP, envíame los detalles por Telegram."
-    ]
+    ],
+    "librarySuggestion": {
+      "title": "Encontramos un flujo listo que podría coincidir con tu solicitud.",
+      "description": "Usa una plantilla verificada de Flowcaster o continúa con un flujo nuevo.",
+      "useExisting": "Usar flujo existente",
+      "generateNew": "Generar un flujo nuevo",
+      "loadingExisting": "Cargando flujo...",
+      "searching": "Buscando en la biblioteca..."
+    }
   },
   "viewer": {
     "loading": "Cargando flujo...",

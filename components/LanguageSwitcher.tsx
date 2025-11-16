@@ -8,6 +8,9 @@ const VISIBLE_LOCALES = [
   { code: "en", label: "🇬🇧" },
   { code: "tr", label: "🇹🇷" },
   { code: "it", label: "🇮🇹" },
+  { code: "es", label: "🇪🇸" },
+  { code: "zh", label: "🇨🇳" },
+  { code: "hi", label: "🇮🇳" },
 ] as const;
 
 export default function LanguageSwitcher() {

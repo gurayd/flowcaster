@@ -7,6 +7,8 @@ const siteUrl = getPublicBaseUrl();
 const embedImageUrl = `${siteUrl}/image.png`;
 const splashImageUrl = `${siteUrl}/splash.png`;
 
+const embedTargetUrl = "https://flowcaster.vercel.app";
+
 const buildEmbedPayload = (actionType: "launch_miniapp" | "launch_frame") =>
   JSON.stringify({
     version: "1",
@@ -16,7 +18,7 @@ const buildEmbedPayload = (actionType: "launch_miniapp" | "launch_frame") =>
       action: {
         type: actionType,
         name: "Flowcaster",
-        url: siteUrl,
+        url: embedTargetUrl,
         splashImageUrl,
         splashBackgroundColor: "#444444",
       },

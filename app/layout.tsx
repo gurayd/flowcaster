@@ -16,7 +16,7 @@ const buildEmbedPayload = (actionType: "launch_miniapp" | "launch_frame") =>
       action: {
         type: actionType,
         name: "Flowcaster",
-        url: `${siteUrl}/frame`,
+        url: siteUrl,
         splashImageUrl,
         splashBackgroundColor: "#444444",
       },

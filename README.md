@@ -101,4 +101,4 @@ open "http://localhost:3000/w?id=<id>"
   - Screen 1 → input + "Generate flow" (POSTs to `/frame`).
   - Screen 2 → "Open flow" button (links to `/w?id=<id>` viewer) and "Tip 0.0005" button (Base tip URL controlled by env vars).
 - To verify the root mini app embed in production: `curl -s https://flowcaster.vercel.app | grep "fc:miniapp"`.
-- In Warpcast Developer Tools, open the Mini App Embed Tool and paste `https://flowcaster.vercel.app` to preview the card.
+- In Warpcast Developer Tools, open the Mini App Embed Tool and paste `https://flowcaster.vercel.app` to preview the card; the embedded button now launches the root UI.

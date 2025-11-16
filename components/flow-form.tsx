@@ -1,13 +1,8 @@
-'use client';
+"use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { N8nWorkflow } from "@/lib/schema";
-
-const DEFAULT_PROMPTS = [
-  "Every morning at 8am fetch the day's weather and save it to Notion.",
-  "Listen for a new Farcaster cast mentioning Flowcaster, then post a GM reply.",
-  "When a new Shopify order contains VIP tag, DM me the details on Telegram.",
-];
+import { useTranslations } from "next-intl";
 
 const defaultMock = process.env.NEXT_PUBLIC_FLOWCASTER_MOCK === "true";
 
@@ -17,6 +12,7 @@ type GenerateStatus = {
 };
 
 export function FlowForm() {
+  const t = useTranslations();
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,11 +36,16 @@ export function FlowForm() {
     fetchTip();
   }, []);
 
+  const suggestions = useMemo(() => {
+    const raw = t.raw("form.suggestions");
+    return Array.isArray(raw) ? (raw as string[]) : [];
+  }, [t]);
+
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (!prompt.trim()) {
-        setError("Please describe your automation.");
+        setError(t("form.errors.promptRequired"));
         return;
       }
       setLoading(true);
@@ -62,56 +63,54 @@ export function FlowForm() {
 
         const data = await response.json();
         if (!response.ok) {
-          throw new Error(data.error ?? "Failed to generate workflow");
+          throw new Error(data.error ?? t("form.errors.unexpected"));
         }
 
         setWorkflow(data.workflow);
         setStatus(data.status ?? null);
         setRaw(data.raw ?? null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Unexpected failure");
+        setError(err instanceof Error ? err.message : t("form.errors.unexpected"));
       } finally {
         setLoading(false);
       }
     },
-    [prompt, mock],
+    [prompt, mock, t],
   );
 
   const helperText = useMemo(() => {
     if (!status) return null;
     if (status.mocked) {
-      return "Running in mock mode (no OpenAI call).";
+      return t("form.helper.mock");
     }
     if (status.repairAttempted) {
-      return "Auto-repair was applied to produce valid JSON.";
+      return t("form.helper.repair");
     }
-    return "Validated on the first try.";
-  }, [status]);
+    return t("form.helper.valid");
+  }, [status, t]);
 
   return (
     <section className="w-full space-y-8 rounded-3xl border border-zinc-200 bg-white/80 p-8 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
       <header className="space-y-2">
         <p className="text-sm uppercase tracking-widest text-indigo-500">
-          Flowcaster
+          {t("title")}
         </p>
         <h1 className="text-3xl font-semibold text-zinc-900 dark:text-white">
-          Describe an automation. Receive n8n JSON.
+          {t("tagline")}
         </h1>
         <p className="text-base text-zinc-600 dark:text-zinc-300">
-          The same engine powers the Farcaster frame at <code>/frame</code>. Use
-          the form below to iterate quickly, then deploy to n8n or share the
-          micro-tip link on Base.
+          {t("form.description")}
         </p>
       </header>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <label className="flex flex-col gap-3">
           <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
-            Automation prompt
+            {t("form.promptLabel")}
           </span>
           <textarea
             className="min-h-[140px] rounded-2xl border border-zinc-300 px-4 py-3 text-base text-zinc-900 shadow-inner focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
-            placeholder="E.g. Watch my Warpcast mentions and DM me on Telegram when someone needs support."
+            placeholder={t("form.placeholder")}
             value={prompt}
             onChange={(event) => setPrompt(event.target.value)}
           />
@@ -125,7 +124,7 @@ export function FlowForm() {
               onChange={(event) => setMock(event.target.checked)}
               className="h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
             />
-            <span>Mock OpenAI call (useful without API key)</span>
+            <span>{t("form.mockToggle")}</span>
           </label>
           {tipUrl ? (
             <a
@@ -134,7 +133,7 @@ export function FlowForm() {
               rel="noreferrer"
               className="inline-flex items-center gap-1 font-medium text-indigo-600 hover:underline"
             >
-              Send micro-tip on Base →
+              {t("form.tipLink")}
             </a>
           ) : null}
         </div>
@@ -144,7 +143,7 @@ export function FlowForm() {
           disabled={loading}
           className="inline-flex w-full items-center justify-center rounded-2xl bg-indigo-600 px-4 py-3 text-base font-semibold text-white shadow-lg shadow-indigo-600/30 transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
         >
-          {loading ? "Generating…" : "Generate workflow"}
+          {loading ? t("form.loading") : t("form.submit")}
         </button>
       </form>
 
@@ -169,7 +168,7 @@ export function FlowForm() {
           </div>
           <details className="rounded-xl bg-white/70 p-3 dark:bg-zinc-900/70">
             <summary className="cursor-pointer text-sm font-medium text-indigo-500">
-              View JSON
+              {t("form.viewJson")}
             </summary>
             <pre className="mt-3 max-h-[320px] overflow-auto rounded-xl bg-zinc-900/90 p-4 text-xs text-indigo-100">
               {raw ?? JSON.stringify(workflow, null, 2)}
@@ -180,10 +179,10 @@ export function FlowForm() {
 
       <aside className="space-y-3 rounded-2xl border border-dashed border-zinc-300 p-4 text-sm text-zinc-600 dark:border-zinc-700 dark:text-zinc-300">
         <p className="font-medium text-zinc-900 dark:text-white">
-          Prompt ideas
+          {t("form.promptIdeas")}
         </p>
         <ul className="list-disc space-y-2 pl-5">
-          {DEFAULT_PROMPTS.map((suggestion) => (
+          {suggestions.map((suggestion) => (
             <li key={suggestion}>
               <button
                 type="button"

@@ -1,0 +1,42 @@
+{
+  "title": "Flowcaster",
+  "tagline": "Genera flujos de trabajo de n8n con lenguaje natural",
+  "form": {
+    "promptLabel": "Describe lo que quieres automatizar",
+    "placeholder": "Ejemplo: Cada mañana a las 9, obtener el precio de Bitcoin y enviarlo por correo.",
+    "submit": "Generar flujo",
+    "description": "Usa el formulario para convertir lenguaje natural en JSON listo para n8n.",
+    "mockToggle": "Simular llamada a OpenAI (útil sin API key)",
+    "tipLink": "Enviar micropropina en Base →",
+    "loading": "Generando…",
+    "viewJson": "Ver JSON",
+    "promptIdeas": "Ideas de prompts",
+    "helper": {
+      "mock": "Ejecutándose en modo simulado (sin llamar a OpenAI).",
+      "repair": "Se aplicó autorreparación para producir JSON válido.",
+      "valid": "Validado al primer intento."
+    },
+    "errors": {
+      "promptRequired": "Describe tu automatización.",
+      "unexpected": "Error inesperado"
+    },
+    "suggestions": [
+      "Cada mañana a las 8 obtén el clima del día y guárdalo en Notion.",
+      "Escucha nuevos casts de Farcaster que mencionen Flowcaster y responde con un GM.",
+      "Cuando un pedido de Shopify tenga la etiqueta VIP, envíame los detalles por Telegram."
+    ]
+  },
+  "viewer": {
+    "loading": "Cargando flujo...",
+    "copy": "Copiar JSON",
+    "copied": "¡Copiado!",
+    "copyError": "No se pudo copiar el JSON al portapapeles.",
+    "id": "ID",
+    "json": "JSON del flujo",
+    "notFound": "Flujo no encontrado",
+    "noId": "No se proporcionó un ID de flujo."
+  },
+  "nav": {
+    "language": "Idioma"
+  }
+}

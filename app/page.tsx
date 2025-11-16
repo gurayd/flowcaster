@@ -1,13 +1,6 @@
-import { FlowForm } from "@/components/flow-form";
-import { MiniAppReady } from "@/components/miniapp-ready";
+import { redirect } from "next/navigation";
+import { defaultLocale } from "@/i18n/config";
 
-export default function HomePage() {
-  return (
-    <main>
-      {/* Farcaster Mini App: remove splash immediately */}
-      <MiniAppReady />
-
-      <FlowForm />
-    </main>
-  );
+export default function RootRedirect() {
+  redirect(`/${defaultLocale}`);
 }

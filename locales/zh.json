@@ -1,0 +1,42 @@
+{
+  "title": "Flowcaster",
+  "tagline": "使用自然语言生成 n8n 工作流",
+  "form": {
+    "promptLabel": "描述你想自动化的内容",
+    "placeholder": "示例：每天早上9点获取比特币价格并发送邮件。",
+    "submit": "生成工作流",
+    "description": "使用此表单将自然语言转换成可在 n8n 中使用的 JSON。",
+    "mockToggle": "模拟 OpenAI 调用（没有 API key 时很有用）",
+    "tipLink": "在 Base 上发送小额打赏 →",
+    "loading": "正在生成…",
+    "viewJson": "查看 JSON",
+    "promptIdeas": "提示灵感",
+    "helper": {
+      "mock": "正在模拟模式下运行（不会调用 OpenAI）。",
+      "repair": "已自动修复以生成有效的 JSON。",
+      "valid": "第一次尝试就通过验证。"
+    },
+    "errors": {
+      "promptRequired": "请描述你的自动化需求。",
+      "unexpected": "出现未知错误"
+    },
+    "suggestions": [
+      "每天早上8点获取当日天气并保存到 Notion。",
+      "监听提到 Flowcaster 的新 Farcaster cast，并回复一个 GM。",
+      "当新的 Shopify 订单带有 VIP 标签时，把详情发到我的 Telegram。"
+    ]
+  },
+  "viewer": {
+    "loading": "正在加载工作流...",
+    "copy": "复制 JSON",
+    "copied": "已复制！",
+    "copyError": "无法复制 JSON 到剪贴板。",
+    "id": "ID",
+    "json": "工作流 JSON",
+    "notFound": "未找到工作流",
+    "noId": "未提供工作流 ID。"
+  },
+  "nav": {
+    "language": "语言"
+  }
+}

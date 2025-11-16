@@ -1,0 +1,42 @@
+{
+  "title": "Flowcaster",
+  "tagline": "Generate n8n workflows using natural language",
+  "form": {
+    "promptLabel": "Describe what you want to automate",
+    "placeholder": "Example: Every morning at 9, fetch Bitcoin price and email it.",
+    "submit": "Generate Flow",
+    "description": "Use the form to turn natural language into deploy-ready n8n JSON.",
+    "mockToggle": "Mock OpenAI call (useful without API key)",
+    "tipLink": "Send micro-tip on Base →",
+    "loading": "Generating…",
+    "viewJson": "View JSON",
+    "promptIdeas": "Prompt ideas",
+    "helper": {
+      "mock": "Running in mock mode (no OpenAI call).",
+      "repair": "Auto-repair was applied to produce valid JSON.",
+      "valid": "Validated on the first try."
+    },
+    "errors": {
+      "promptRequired": "Please describe your automation.",
+      "unexpected": "Unexpected failure"
+    },
+    "suggestions": [
+      "Every morning at 8am fetch the day's weather and save it to Notion.",
+      "Listen for a new Farcaster cast mentioning Flowcaster, then post a GM reply.",
+      "When a new Shopify order contains VIP tag, DM me the details on Telegram."
+    ]
+  },
+  "viewer": {
+    "loading": "Loading workflow...",
+    "copy": "Copy JSON",
+    "copied": "Copied!",
+    "copyError": "Could not copy JSON to clipboard.",
+    "id": "ID",
+    "json": "Workflow JSON",
+    "notFound": "Flow not found",
+    "noId": "No workflow id was provided."
+  },
+  "nav": {
+    "language": "Language"
+  }
+}

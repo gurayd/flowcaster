@@ -1,0 +1,42 @@
+{
+  "title": "Flowcaster",
+  "tagline": "Genera workflow n8n con il linguaggio naturale",
+  "form": {
+    "promptLabel": "Descrivi ciò che vuoi automatizzare",
+    "placeholder": "Esempio: Ogni mattina alle 9 recupera il prezzo del Bitcoin e invialo via email.",
+    "submit": "Genera workflow",
+    "description": "Usa il modulo per trasformare il linguaggio naturale in JSON pronto per n8n.",
+    "mockToggle": "Simula la chiamata OpenAI (utile senza API key)",
+    "tipLink": "Invia una micro-mancia su Base →",
+    "loading": "Generazione in corso…",
+    "viewJson": "Mostra JSON",
+    "promptIdeas": "Idee di prompt",
+    "helper": {
+      "mock": "In esecuzione in modalità simulata (senza chiamare OpenAI).",
+      "repair": "È stata applicata l'autoriparazione per produrre JSON valido.",
+      "valid": "Validato al primo tentativo."
+    },
+    "errors": {
+      "promptRequired": "Descrivi la tua automatizzazione.",
+      "unexpected": "Errore imprevisto"
+    },
+    "suggestions": [
+      "Ogni mattina alle 8 recupera il meteo del giorno e salvalo in Notion.",
+      "Ascolta i nuovi cast su Farcaster che menzionano Flowcaster e rispondi con un GM.",
+      "Quando un ordine Shopify ha il tag VIP, inviami i dettagli su Telegram."
+    ]
+  },
+  "viewer": {
+    "loading": "Caricamento del workflow...",
+    "copy": "Copia JSON",
+    "copied": "Copiato!",
+    "copyError": "Impossibile copiare il JSON negli appunti.",
+    "id": "ID",
+    "json": "JSON del workflow",
+    "notFound": "Workflow non trovato",
+    "noId": "Nessun ID del workflow è stato fornito."
+  },
+  "nav": {
+    "language": "Lingua"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "title": "Flowcaster",
+  "tagline": "Doğal dil kullanarak n8n iş akışları oluşturun",
+  "form": {
+    "promptLabel": "Otomatikleştirmek istediğiniz şeyi açıklayın",
+    "placeholder": "Örnek: Her sabah 9'da Bitcoin fiyatını al ve e-posta gönder.",
+    "submit": "Akışı oluştur",
+    "description": "Formu kullanarak doğal dili n8n için hazır JSON'a dönüştürün.",
+    "mockToggle": "OpenAI çağrısını simüle et (API anahtarı olmadan kullanışlı)",
+    "tipLink": "Base üzerinden mikro bahşiş gönder →",
+    "loading": "Oluşturuluyor…",
+    "viewJson": "JSON'u görüntüle",
+    "promptIdeas": "Prompt fikirleri",
+    "helper": {
+      "mock": "Simülasyon modunda çalışıyor (OpenAI çağrısı yapılmıyor).",
+      "repair": "Geçerli JSON üretmek için otomatik düzeltme uygulandı.",
+      "valid": "İlk denemede doğrulandı."
+    },
+    "errors": {
+      "promptRequired": "Lütfen otomasyonu açıklayın.",
+      "unexpected": "Beklenmeyen hata"
+    },
+    "suggestions": [
+      "Her sabah 8'de günün havasını al ve Notion'a kaydet.",
+      "Flowcaster'dan bahseden yeni Farcaster cast'lerini dinle ve GM yanıtı gönder.",
+      "VIP etiketi taşıyan yeni Shopify siparişi geldiğinde detayları Telegram'dan bana gönder."
+    ]
+  },
+  "viewer": {
+    "loading": "İş akışı yükleniyor...",
+    "copy": "JSON'u kopyala",
+    "copied": "Kopyalandı!",
+    "copyError": "JSON panoya kopyalanamadı.",
+    "id": "ID",
+    "json": "İş akışı JSON'u",
+    "notFound": "Akış bulunamadı",
+    "noId": "Herhangi bir akış kimliği sağlanmadı."
+  },
+  "nav": {
+    "language": "Dil"
+  }
+}

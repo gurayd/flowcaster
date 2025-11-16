@@ -32,7 +32,7 @@ export function BaseTipButton() {
       disabled={isPending}
       className="inline-flex items-center rounded-2xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-emerald-300"
     >
-      {isPending ? "Preparing tip..." : "Send 0.005 ETH via Base"}
+      {isPending ? "Preparing tip..." : "Send tip via Base"}
     </button>
   );
 }

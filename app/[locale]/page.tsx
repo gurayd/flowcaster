@@ -13,8 +13,7 @@ export default async function HomePage() {
 
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 lg:flex-row">
         <div className="flex-1 space-y-6">
-          <div className="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400">
-            <span>{t("nav.language")}</span>
+          <div className="flex items-center justify-end">
             <LanguageSwitcher />
           </div>
           <p className="text-sm uppercase tracking-[0.3em] text-zinc-500">

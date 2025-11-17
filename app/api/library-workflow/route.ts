@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getLibraryEntryById } from "@/lib/librarySearch";
-import { saveWorkflow } from "@/lib/store";
-
-const DEFAULT_REPOS = (
-  process.env.WORKFLOW_LIBRARY_REPOS ??
-  "gurayd/2K-N8NWORKFLOWS,gurayd/awesome-n8n-templates"
-)
-  .split(",")
-  .map((repo) => repo.trim())
-  .filter(Boolean);
-const DEFAULT_BRANCH = process.env.WORKFLOW_LIBRARY_BRANCH ?? "main";
+import { ensureWorkflowsTable, sql } from "@/lib/db";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const hasPostgresEnv =
+  Boolean(
+    process.env.POSTGRES_URL ||
+      process.env.POSTGRES_PRISMA_URL ||
+      process.env.POSTGRES_URL_NON_POOLING ||
+      process.env.POSTGRES_HOST,
+  );
 
 export async function GET(request: NextRequest) {
   const id = request.nextUrl.searchParams.get("id");
@@ -20,38 +19,34 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
 
-  const entry = getLibraryEntryById(id);
-
-  if (!entry) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!hasPostgresEnv) {
+    return NextResponse.json(
+      { error: "Postgres unavailable", details: "Missing connection env vars" },
+      { status: 500 },
+    );
   }
 
-  const branch = entry.branch ?? DEFAULT_BRANCH;
-  const candidateRepos = entry.repo ? [entry.repo] : DEFAULT_REPOS;
+  try {
+    await ensureWorkflowsTable();
+    const { rows } =
+      await sql`SELECT id, payload FROM workflows WHERE id = ${id}`;
 
-  for (const repo of candidateRepos) {
-    const rawUrl = `https://raw.githubusercontent.com/${repo}/${branch}/${entry.githubPath}`;
-    try {
-      const response = await fetch(rawUrl);
-      if (!response.ok) {
-        throw new Error(`GitHub returned ${response.status}`);
-      }
-
-      const workflow = await response.json();
-      saveWorkflow(id, workflow);
-
-      return NextResponse.json({ id, workflow, source: { repo, branch } });
-    } catch (error) {
-      // Try next repo
-      console.warn(`Failed to load workflow ${id} from ${repo}`, error);
+    if (rows.length === 0) {
+      return NextResponse.json(
+        { error: "Workflow not found in library" },
+        { status: 404 },
+      );
     }
-  }
 
-  return NextResponse.json(
-    {
-      error: "Unable to load this library workflow right now. Please try generating a new one.",
-      details: `Tried repositories: ${candidateRepos.join(", ")}`,
-    },
-    { status: 502 },
-  );
+    return NextResponse.json({ id: rows[0].id, workflow: rows[0].payload });
+  } catch (error) {
+    console.error("library-workflow error", error);
+    return NextResponse.json(
+      {
+        error: "Failed to load workflow",
+        details: error instanceof Error ? error.message : String(error),
+      },
+      { status: 500 },
+    );
+  }
 }

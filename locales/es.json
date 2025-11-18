@@ -10,6 +10,9 @@
     "tipLabel": "Enviar propina en Base",
     "loading": "Generando…",
     "viewJson": "Ver JSON",
+    "copyJsonLabel": "Copiar JSON",
+    "copyJsonSuccess": "JSON del flujo copiado al portapapeles.",
+    "loadedFromLibrary": "Cargado desde la biblioteca",
     "promptIdeas": "Ideas de prompts",
     "helper": {
       "mock": "Ejecutándose en modo simulado (sin llamar a OpenAI).",

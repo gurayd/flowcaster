@@ -10,6 +10,9 @@
     "tipLabel": "在 Base 上打赏",
     "loading": "正在生成…",
     "viewJson": "查看 JSON",
+    "copyJsonLabel": "复制 JSON",
+    "copyJsonSuccess": "工作流 JSON 已复制到剪贴板。",
+    "loadedFromLibrary": "已从库中加载",
     "promptIdeas": "提示灵感",
     "helper": {
       "mock": "正在模拟模式下运行（不会调用 OpenAI）。",

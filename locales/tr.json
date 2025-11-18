@@ -10,6 +10,9 @@
     "tipLabel": "Base üzerinden bahşiş gönder",
     "loading": "Oluşturuluyor…",
     "viewJson": "JSON'u görüntüle",
+    "copyJsonLabel": "JSON'u kopyala",
+    "copyJsonSuccess": "İş akışı JSON'u panoya kopyalandı.",
+    "loadedFromLibrary": "Kütüphaneden yüklendi",
     "promptIdeas": "Prompt fikirleri",
     "helper": {
       "mock": "Simülasyon modunda çalışıyor (OpenAI çağrısı yapılmıyor).",

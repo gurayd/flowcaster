@@ -10,6 +10,9 @@
     "tipLabel": "Send tip via Base",
     "loading": "Generating…",
     "viewJson": "View JSON",
+    "copyJsonLabel": "Copy JSON",
+    "copyJsonSuccess": "Workflow JSON copied to clipboard.",
+    "loadedFromLibrary": "Loaded from library",
     "promptIdeas": "Prompt ideas",
     "helper": {
       "mock": "Running in mock mode (no OpenAI call).",

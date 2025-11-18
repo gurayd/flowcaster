@@ -10,6 +10,9 @@
     "tipLabel": "Base पर टिप भेजें",
     "loading": "जनरेट किया जा रहा है…",
     "viewJson": "JSON देखें",
+    "copyJsonLabel": "JSON कॉपी करें",
+    "copyJsonSuccess": "वर्कफ़्लो JSON क्लिपबोर्ड में कॉपी हो गया।",
+    "loadedFromLibrary": "लाइब्रेरी से लोड किया गया",
     "promptIdeas": "प्रॉम्प्ट सुझाव",
     "helper": {
       "mock": "वर्तमान में मॉक मोड में (OpenAI कॉल नहीं होगी)।",

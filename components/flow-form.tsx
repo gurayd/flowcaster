@@ -3,7 +3,6 @@
 import { useCallback, useMemo, useState } from "react";
 import type { N8nWorkflow } from "@/lib/schema";
 import { useTranslations } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const BaseTipButton = dynamic(
@@ -27,10 +26,10 @@ type LibraryHit = {
   score: number;
 };
 
+type WorkflowSource = "generated" | "library" | null;
+
 export function FlowForm() {
   const t = useTranslations();
-  const router = useRouter();
-  const pathname = usePathname();
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,6 +40,8 @@ export function FlowForm() {
   const [libraryHit, setLibraryHit] = useState<LibraryHit | null>(null);
   const [isSearchingLibrary, setIsSearchingLibrary] = useState(false);
   const [useLibraryLoading, setUseLibraryLoading] = useState(false);
+  const [workflowSource, setWorkflowSource] = useState<WorkflowSource>(null);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   const suggestions = useMemo(() => {
     const raw = t.raw("form.suggestions");
@@ -54,6 +55,8 @@ export function FlowForm() {
     setWorkflow(null);
     setStatus(null);
     setRaw(null);
+    setWorkflowSource(null);
+    setCopySuccess(false);
 
     try {
       const response = await fetch("/api/generate", {
@@ -70,6 +73,7 @@ export function FlowForm() {
       setWorkflow(data.workflow);
       setStatus(data.status ?? null);
       setRaw(data.raw ?? null);
+      setWorkflowSource("generated");
     } catch (err) {
       setError(err instanceof Error ? err.message : t("form.errors.unexpected"));
     } finally {
@@ -124,6 +128,24 @@ export function FlowForm() {
     }
     return t("form.helper.valid");
   }, [status, t]);
+
+  const workflowJson = useMemo(() => {
+    if (!workflow) return null;
+    return raw ?? JSON.stringify(workflow, null, 2);
+  }, [raw, workflow]);
+
+  const canCopyJson = Boolean(workflowJson);
+
+  const handleCopyJson = useCallback(async () => {
+    if (!workflowJson) return;
+    try {
+      await navigator.clipboard.writeText(workflowJson);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 1500);
+    } catch {
+      setError(t("form.errors.unexpected"));
+    }
+  }, [t, workflowJson]);
 
   return (
     <section className="w-full space-y-8 rounded-3xl border border-zinc-200 bg-white/80 p-8 shadow-sm backdrop-blur dark:border-zinc-800 dark:bg-zinc-900/70">
@@ -192,19 +214,37 @@ export function FlowForm() {
               {helperText ? (
                 <p className="text-xs text-zinc-500">{helperText}</p>
               ) : null}
+              {workflowSource === "library" ? (
+                <p className="text-xs font-semibold text-indigo-600">
+                  {t("form.loadedFromLibrary")}
+                </p>
+              ) : null}
             </div>
             <span className="rounded-full bg-zinc-900 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white dark:bg-white dark:text-zinc-900">
               {workflow.triggerMode}
             </span>
           </div>
-          <details className="rounded-xl bg-white/70 p-3 dark:bg-zinc-900/70">
-            <summary className="cursor-pointer text-sm font-medium text-indigo-500">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-white/70 p-3 dark:bg-zinc-900/70">
+            <span className="text-sm font-medium text-indigo-500">
               {t("form.viewJson")}
-            </summary>
-            <pre className="mt-3 max-h-[320px] overflow-auto rounded-xl bg-zinc-900/90 p-4 text-xs text-indigo-100">
-              {raw ?? JSON.stringify(workflow, null, 2)}
-            </pre>
-          </details>
+            </span>
+            <button
+              type="button"
+              onClick={handleCopyJson}
+              disabled={!canCopyJson}
+              className="rounded-lg bg-indigo-600 px-3 py-1 text-xs font-semibold text-white shadow hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-indigo-300"
+            >
+              {t("form.copyJsonLabel")}
+            </button>
+          </div>
+          {copySuccess ? (
+            <p className="text-xs font-medium text-green-600 dark:text-green-400">
+              {t("form.copyJsonSuccess")}
+            </p>
+          ) : null}
+          <pre className="max-h-[320px] overflow-auto rounded-xl bg-zinc-900/90 p-4 text-xs text-indigo-100">
+            {workflowJson ?? ""}
+          </pre>
         </div>
       ) : null}
 
@@ -225,6 +265,9 @@ export function FlowForm() {
                 if (!libraryHit) return;
                 setUseLibraryLoading(true);
                 setError(null);
+                setCopySuccess(false);
+                setWorkflow(null);
+                setWorkflowSource(null);
                 try {
                   const response = await fetch(
                     `/api/library-workflow?id=${encodeURIComponent(libraryHit.id)}`,
@@ -233,9 +276,14 @@ export function FlowForm() {
                   if (!response.ok) {
                     throw new Error(data.error ?? t("form.errors.unexpected"));
                   }
-                  const segments = pathname.split("/").filter(Boolean);
-                  const locale = segments[0] ?? "en";
-                  router.push(`/${locale}/w?id=${encodeURIComponent(data.id)}`);
+                  if (!data?.workflow) {
+                    throw new Error(t("form.errors.unexpected"));
+                  }
+                  setWorkflow(data.workflow as N8nWorkflow);
+                  setStatus(null);
+                  setRaw(null);
+                  setWorkflowSource("library");
+                  setLibraryHit(null);
                 } catch (err) {
                   setError(err instanceof Error ? err.message : t("form.errors.unexpected"));
                 } finally {

@@ -10,6 +10,9 @@
     "tipLabel": "Invia una mancia su Base",
     "loading": "Generazione in corso…",
     "viewJson": "Mostra JSON",
+    "copyJsonLabel": "Copia JSON",
+    "copyJsonSuccess": "JSON del workflow copiato negli appunti.",
+    "loadedFromLibrary": "Caricato dalla libreria",
     "promptIdeas": "Idee di prompt",
     "helper": {
       "mock": "In esecuzione in modalità simulata (senza chiamare OpenAI).",

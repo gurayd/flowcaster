@@ -42,7 +42,12 @@
     "id": "ID",
     "json": "JSON del flujo",
     "notFound": "Flujo no encontrado",
-    "noId": "No se proporcionó un ID de flujo."
+    "noId": "No se proporcionó un ID de flujo.",
+    "unavailableTitle": "El flujo no está disponible en este entorno.",
+    "unavailableBody": "Este flujo no se puede cargar ahora mismo. Prueba a generar uno nuevo o vuelve a ejecutar la migración.",
+    "copyDisabled": "Copiar deshabilitado porque no hay datos del flujo.",
+    "copyTooltip": "Copiar JSON",
+    "noData": "(Sin datos de flujo cargados)"
   },
   "nav": {
     "language": "Idioma"

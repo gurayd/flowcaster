@@ -42,7 +42,12 @@
     "id": "ID",
     "json": "İş akışı JSON'u",
     "notFound": "Akış bulunamadı",
-    "noId": "Herhangi bir akış kimliği sağlanmadı."
+    "noId": "Herhangi bir akış kimliği sağlanmadı.",
+    "unavailableTitle": "Bu ortamda iş akışı kullanılamıyor.",
+    "unavailableBody": "Bu iş akışı şu anda yüklenemiyor. Yeni bir akış oluşturabilir veya migrasyonu yeniden çalıştırabilirsiniz.",
+    "copyDisabled": "İş akışı verisi olmadığından kopyalama devre dışı.",
+    "copyTooltip": "JSON'u kopyala",
+    "noData": "(Yüklü iş akışı verisi yok)"
   },
   "nav": {
     "language": "Dil"

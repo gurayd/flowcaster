@@ -1,16 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ensureWorkflowsTable, sql } from "@/lib/db";
+import { ensureWorkflowsTable, getSqlClientOrNull } from "@/lib/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const hasPostgresEnv =
-  Boolean(
-    process.env.POSTGRES_URL ||
-      process.env.POSTGRES_PRISMA_URL ||
-      process.env.POSTGRES_URL_NON_POOLING ||
-      process.env.POSTGRES_HOST,
-  );
 
 export async function GET(request: NextRequest) {
   const id = request.nextUrl.searchParams.get("id");
@@ -19,17 +11,21 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
 
-  if (!hasPostgresEnv) {
-    return NextResponse.json(
-      { error: "Postgres unavailable", details: "Missing connection env vars" },
-      { status: 500 },
-    );
-  }
-
   try {
+    const client = getSqlClientOrNull();
+    if (!client) {
+      return NextResponse.json(
+        {
+          error: "Database not configured",
+          details: "Missing Postgres env vars",
+        },
+        { status: 503 },
+      );
+    }
+
     await ensureWorkflowsTable();
     const { rows } =
-      await sql`SELECT id, payload FROM workflows WHERE id = ${id}`;
+      await client`SELECT id, payload FROM workflows WHERE id = ${id}`;
 
     if (rows.length === 0) {
       return NextResponse.json(

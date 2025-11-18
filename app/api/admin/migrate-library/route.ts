@@ -1,17 +1,9 @@
 import { NextResponse } from "next/server";
-import { ensureWorkflowsTable, sql } from "@/lib/db";
+import { ensureWorkflowsTable, getSqlClientOrNull } from "@/lib/db";
 import libraryIndex from "@/data/library-index.json";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-const hasPostgresEnv =
-  Boolean(
-    process.env.POSTGRES_URL ||
-      process.env.POSTGRES_PRISMA_URL ||
-      process.env.POSTGRES_URL_NON_POOLING ||
-      process.env.POSTGRES_HOST,
-  );
 
 function toTextArrayLiteral(values?: string[]) {
   if (!values || values.length === 0) return "{}";
@@ -31,12 +23,14 @@ export async function POST() {
   console.log("🟩 /api/admin/migrate-library called");
 
   try {
-    if (!hasPostgresEnv) {
-      const message = "Missing Postgres connection info";
-      console.warn("🟥 migrate-library env check failed:", message);
+    const client = getSqlClientOrNull();
+    if (!client) {
       return NextResponse.json(
-        { error: "Postgres unavailable", details: message },
-        { status: 500 },
+        {
+          error: "Database not configured",
+          details: "Missing Postgres env vars",
+        },
+        { status: 503 },
       );
     }
 
@@ -56,10 +50,10 @@ export async function POST() {
         const payload = await fetchWorkflow(repo, branch, path);
         const payloadJson = JSON.stringify(payload);
         const existing =
-          await sql`SELECT id FROM workflows WHERE id = ${entry.id}`;
+          await client`SELECT id FROM workflows WHERE id = ${entry.id}`;
         const alreadyExists = (existing.rowCount ?? 0) > 0;
 
-        await sql`
+        await client`
           INSERT INTO workflows (id, title, description, tags, source_repo, source_path, payload)
           VALUES (
             ${entry.id},

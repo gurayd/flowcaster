@@ -1,29 +1,20 @@
 [
   {
-    "id": "daily_http_get",
-    "name": "Daily HTTP GET Request",
-    "description": "Run an HTTP GET every morning at 9 and log the response",
-    "tags": ["cron", "http", "logging"],
-    "githubPath": "flows/daily_http_get.json",
+    "id": "telegram_schedule_automation_scheduled",
+    "name": "Telegram Schedule Automation (Scheduled)",
+    "description": "Scheduled Telegram automation example from batch-1.",
+    "tags": ["telegram", "schedule", "automation"],
     "repo": "gurayd/2K-N8NWORKFLOWS",
-    "branch": "main"
+    "branch": "main",
+    "githubPath": "batch-1/0001_Telegram_Schedule_Automation_Scheduled.json"
   },
   {
-    "id": "notion_task_sync",
-    "name": "Notion Task Sync",
-    "description": "Monitor a Notion database and send summaries to Slack",
-    "tags": ["notion", "slack", "automation"],
-    "githubPath": "flows/notion_task_sync.json",
+    "id": "google_sheets_typeform_automate_triggered",
+    "name": "Google Sheets + Typeform (Triggered)",
+    "description": "Triggered automation between Google Sheets and Typeform from batch-1.",
+    "tags": ["google-sheets", "typeform", "automation"],
     "repo": "gurayd/2K-N8NWORKFLOWS",
-    "branch": "main"
-  },
-  {
-    "id": "shopify_vip_alert",
-    "name": "Shopify VIP Order Alert",
-    "description": "Detect Shopify orders with the VIP tag and ping Telegram",
-    "tags": ["shopify", "telegram", "vip"],
-    "githubPath": "flows/shopify_vip_alert.json",
-    "repo": "gurayd/awesome-n8n-templates",
-    "branch": "main"
+    "branch": "main",
+    "githubPath": "batch-1/0004_GoogleSheets_Typeform_Automate_Triggered.json"
   }
 ]

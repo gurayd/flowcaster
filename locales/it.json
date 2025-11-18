@@ -42,7 +42,12 @@
     "id": "ID",
     "json": "JSON del workflow",
     "notFound": "Workflow non trovato",
-    "noId": "Nessun ID del workflow è stato fornito."
+    "noId": "Nessun ID del workflow è stato fornito.",
+    "unavailableTitle": "Workflow non disponibile in questo ambiente.",
+    "unavailableBody": "Questo workflow non è accessibile al momento. Prova a generarne uno nuovo o riesegui la migrazione.",
+    "copyDisabled": "Copia disabilitata perché non ci sono dati del workflow.",
+    "copyTooltip": "Copia JSON",
+    "noData": "(Nessun dato di workflow caricato)"
   },
   "nav": {
     "language": "Lingua"

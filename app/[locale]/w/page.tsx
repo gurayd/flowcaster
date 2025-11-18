@@ -145,33 +145,43 @@ function WorkflowPageContent() {
       )}
 
       {!loading && error && (
-        <p className="text-sm text-red-600">
-          {t("viewer.notFound")}: {error}
-        </p>
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+          <p className="font-semibold">{t("viewer.unavailableTitle")}</p>
+          <p className="text-xs text-red-500">{error}</p>
+        </div>
       )}
 
-      {!loading && !error && workflow && (
-        <>
-          <section className="space-y-2">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-medium">{t("viewer.json")}</h2>
-              <button
-                type="button"
-                onClick={handleCopy}
-                className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500"
-              >
-                {copied ? t("viewer.copied") : t("viewer.copy")}
-              </button>
-            </div>
-            <pre className="max-h-[65vh] overflow-auto rounded bg-gray-900 p-4 text-xs text-green-100">
-              {jsonString}
-            </pre>
-            {copyError && (
-              <p className="text-xs text-red-500">{copyError}</p>
-            )}
-          </section>
-        </>
+      {!loading && !error && !workflow && (
+        <div className="rounded-2xl border border-zinc-200 bg-zinc-100 p-4 text-sm text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900/40 dark:text-zinc-200">
+          <p className="font-semibold">{t("viewer.unavailableTitle")}</p>
+          <p>{t("viewer.unavailableBody")}</p>
+        </div>
       )}
+
+      <section className="space-y-2">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-medium">{t("viewer.json")}</h2>
+          <button
+            type="button"
+            onClick={handleCopy}
+            disabled={!workflow || loading}
+            title={
+              !workflow || loading
+                ? t("viewer.copyDisabled")
+                : t("viewer.copyTooltip")
+            }
+            className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-300"
+          >
+            {copied ? t("viewer.copied") : t("viewer.copy")}
+          </button>
+        </div>
+        <pre className="max-h-[65vh] overflow-auto rounded bg-gray-900 p-4 text-xs text-green-100">
+          {jsonString || t("viewer.noData")}
+        </pre>
+        {copyError && (
+          <p className="text-xs text-red-500">{copyError}</p>
+        )}
+      </section>
     </main>
   );
 }

@@ -42,7 +42,12 @@
     "id": "ID",
     "json": "工作流 JSON",
     "notFound": "未找到工作流",
-    "noId": "未提供工作流 ID。"
+    "noId": "未提供工作流 ID。",
+    "unavailableTitle": "此环境中无法使用该工作流。",
+    "unavailableBody": "目前无法加载此工作流。请尝试生成新的工作流或重新运行迁移。",
+    "copyDisabled": "由于没有工作流数据，复制已禁用。",
+    "copyTooltip": "复制 JSON",
+    "noData": "（尚未加载工作流数据）"
   },
   "nav": {
     "language": "语言"

@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -60,25 +62,22 @@ function WorkflowPageContent() {
       setState({ data: null, loading: true, error: null });
     });
 
-    fetch(`/api/workflow?id=${encodeURIComponent(id)}`, {
+    fetch(`/api/library-workflow?id=${encodeURIComponent(id)}`, {
       signal: controller.signal,
+      cache: "no-store",
     })
       .then(async (res) => {
+        const body = await res.json().catch(() => null);
         if (!res.ok) {
-          let message = `Request failed with status ${res.status}`;
-          try {
-            const body = await res.json();
-            if (body?.error) {
-              message = body.error;
-            }
-          } catch (err) {
-            if (process.env.NODE_ENV === "development") {
-              console.warn("Failed to parse error body", err);
-            }
-          }
+          const message =
+            (body as { error?: string } | null)?.error ??
+            `Request failed with status ${res.status}`;
           throw new Error(message);
         }
-        return res.json();
+        if (!body || typeof body !== "object" || !("workflow" in body)) {
+          throw new Error(fallbackError);
+        }
+        return body as WorkflowResponse;
       })
       .then((json: WorkflowResponse) => {
         if (!cancelled) {
@@ -97,13 +96,22 @@ function WorkflowPageContent() {
       cancelled = true;
       controller.abort();
     };
-  }, [fallbackError, id, t]);
+  }, [fallbackError, id]);
 
   const workflow = data?.workflow ?? null;
   const jsonString = useMemo(
     () => (workflow ? JSON.stringify(workflow, null, 2) : ""),
     [workflow],
   );
+  const hasWorkflow = Boolean(workflow);
+  const copyButtonDisabled = !hasWorkflow || loading;
+  const copyButtonTitle = copyButtonDisabled ? t("viewer.copyTooltip") : undefined;
+  const copyButtonLabel = copyButtonDisabled
+    ? t("viewer.copyDisabled")
+    : copied
+      ? t("viewer.copied")
+      : t("viewer.copy");
+  const showUnavailable = !loading && (!hasWorkflow || Boolean(error));
 
   const handleCopy = async () => {
     if (!jsonString) {
@@ -144,17 +152,15 @@ function WorkflowPageContent() {
         <p className="text-sm text-gray-600">{t("viewer.loading")}</p>
       )}
 
-      {!loading && error && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-          <p className="font-semibold">{t("viewer.unavailableTitle")}</p>
-          <p className="text-xs text-red-500">{error}</p>
-        </div>
-      )}
-
-      {!loading && !error && !workflow && (
+      {showUnavailable && (
         <div className="rounded-2xl border border-zinc-200 bg-zinc-100 p-4 text-sm text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900/40 dark:text-zinc-200">
           <p className="font-semibold">{t("viewer.unavailableTitle")}</p>
           <p>{t("viewer.unavailableBody")}</p>
+          {error && (
+            <p className="text-xs text-red-500">
+              {error}
+            </p>
+          )}
         </div>
       )}
 
@@ -164,15 +170,11 @@ function WorkflowPageContent() {
           <button
             type="button"
             onClick={handleCopy}
-            disabled={!workflow || loading}
-            title={
-              !workflow || loading
-                ? t("viewer.copyDisabled")
-                : t("viewer.copyTooltip")
-            }
+            disabled={copyButtonDisabled}
+            title={copyButtonTitle}
             className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-blue-300"
           >
-            {copied ? t("viewer.copied") : t("viewer.copy")}
+            {copyButtonLabel}
           </button>
         </div>
         <pre className="max-h-[65vh] overflow-auto rounded bg-gray-900 p-4 text-xs text-green-100">

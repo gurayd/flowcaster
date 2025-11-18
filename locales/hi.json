@@ -12,6 +12,7 @@
     "tipSuccess": "टिप Base पर भेजी गई। धन्यवाद!",
     "tipError": "टिप भेजने में समस्या हुई, दोबारा प्रयास करें।",
     "tipUnavailable": "टिप भेजने के लिए Farcaster वॉलेट ज़रूरी है।",
+    "tipFallbackLink": "Base टिप लिंक खोलें",
     "loading": "जनरेट किया जा रहा है…",
     "viewJson": "JSON देखें",
     "copyJsonLabel": "JSON कॉपी करें",

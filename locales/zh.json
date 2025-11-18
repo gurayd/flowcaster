@@ -12,6 +12,7 @@
     "tipSuccess": "已在 Base 完成打赏，感谢支持！",
     "tipError": "打赏失败，请稍后重试。",
     "tipUnavailable": "需要 Farcaster 钱包才能打赏。",
+    "tipFallbackLink": "改用 Base 打赏链接",
     "loading": "正在生成…",
     "viewJson": "查看 JSON",
     "copyJsonLabel": "复制 JSON",

@@ -12,6 +12,7 @@
     "tipSuccess": "Propina enviada en Base. ¡Gracias!",
     "tipError": "No se pudo enviar la propina. Intenta otra vez.",
     "tipUnavailable": "Necesitas la wallet de Farcaster para propinas.",
+    "tipFallbackLink": "Abrir enlace de propina en Base",
     "loading": "Generando…",
     "viewJson": "Ver JSON",
     "copyJsonLabel": "Copiar JSON",

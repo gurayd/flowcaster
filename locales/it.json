@@ -12,6 +12,7 @@
     "tipSuccess": "Mancia inviata su Base. Grazie!",
     "tipError": "Invio della mancia non riuscito. Riprova.",
     "tipUnavailable": "Serve il wallet Farcaster per inviare mance.",
+    "tipFallbackLink": "Apri il link di mancia su Base",
     "loading": "Generazione in corso…",
     "viewJson": "Mostra JSON",
     "copyJsonLabel": "Copia JSON",

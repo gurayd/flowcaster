@@ -12,6 +12,7 @@
     "tipSuccess": "Bahşiş Base üzerinden gönderildi. Teşekkürler!",
     "tipError": "Bahşiş gönderilemedi. Lütfen tekrar deneyin.",
     "tipUnavailable": "Bahşiş için Farcaster cüzdanı gerekiyor.",
+    "tipFallbackLink": "Base bahşiş bağlantısını aç",
     "loading": "Oluşturuluyor…",
     "viewJson": "JSON'u görüntüle",
     "copyJsonLabel": "JSON'u kopyala",

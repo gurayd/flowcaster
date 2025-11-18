@@ -3,6 +3,10 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { getPublicBaseUrl } from "@/lib/env";
 
+// Force Node runtime so reading env vars inside this module never triggers
+// Next.js' ENVIRONMENT_FALLBACK for Edge rendering.
+export const runtime = "nodejs";
+
 const siteUrl = getPublicBaseUrl();
 const embedImageUrl = `${siteUrl}/image.png`;
 const splashImageUrl = `${siteUrl}/splash.png`;

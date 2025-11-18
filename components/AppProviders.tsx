@@ -18,7 +18,11 @@ export function AppProviders({ children, messages, locale }: AppProvidersProps) 
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <NextIntlClientProvider messages={messages} locale={locale}>
+        <NextIntlClientProvider
+          messages={messages}
+          locale={locale}
+          timeZone="UTC" // Avoid ENVIRONMENT_FALLBACK warnings by keeping formatting deterministic.
+        >
           {children}
         </NextIntlClientProvider>
       </QueryClientProvider>

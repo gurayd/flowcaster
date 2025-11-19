@@ -7,9 +7,9 @@ import { base } from "wagmi/chains";
 import { useAccount, useConnect, useWriteContract } from "wagmi";
 
 const TIP_RECIPIENT = "0x86796a14774d06e18f5cb1c67c97f578e30bba02" as const;
-const BASE_USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bDA02913" as const;
-const BASE_USDC_DECIMALS = 6;
-const TIP_LINK = `https://pay.base.org/?to=${TIP_RECIPIENT}&chain=base&token=${BASE_USDC_ADDRESS}&amount=1`;
+const USDC_BASE_ADDRESS = "0x833589fCD6EDB6e08f4c7C32D4f71b54bDa02913" as const;
+const USDC_DECIMALS = 6;
+const TIP_LINK = `https://pay.base.org/?chain=base&token=${USDC_BASE_ADDRESS}&amount=1&to=${TIP_RECIPIENT}`;
 
 const erc20Abi = [
   {
@@ -69,10 +69,10 @@ export function BaseTipButton() {
       }
 
       setState("sending");
-      const amount = parseUnits("1", BASE_USDC_DECIMALS);
+      const amount = parseUnits("1", USDC_DECIMALS);
       await writeContractAsync({
         chainId: base.id,
-        address: BASE_USDC_ADDRESS,
+        address: USDC_BASE_ADDRESS,
         abi: erc20Abi,
         functionName: "transfer",
         args: [TIP_RECIPIENT, amount],

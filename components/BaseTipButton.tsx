@@ -2,13 +2,27 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { parseEther } from "viem";
+import { parseUnits } from "viem";
 import { base } from "wagmi/chains";
-import { useAccount, useConnect, useSendTransaction } from "wagmi";
+import { useAccount, useConnect, useWriteContract } from "wagmi";
 
-const TIP_ADDRESS = "0x86796a14774d06e18f5cb1c67c97f578e30bba02";
-const TIP_VALUE = "0.005";
-const TIP_LINK = `https://pay.base.org/?to=${TIP_ADDRESS}&chain=base&value=${TIP_VALUE}`;
+const TIP_RECIPIENT = "0x86796a14774d06e18f5cb1c67c97f578e30bba02" as const;
+const BASE_USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bDA02913" as const;
+const BASE_USDC_DECIMALS = 6;
+const TIP_LINK = `https://pay.base.org/?to=${TIP_RECIPIENT}&chain=base&token=${BASE_USDC_ADDRESS}&amount=1`;
+
+const erc20Abi = [
+  {
+    type: "function",
+    name: "transfer",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "value", type: "uint256" },
+    ],
+    outputs: [{ name: "", type: "bool" }],
+  },
+] as const;
 
 type TipState = "idle" | "connecting" | "sending" | "success" | "error";
 
@@ -16,7 +30,7 @@ export function BaseTipButton() {
   const t = useTranslations();
   const { isConnected } = useAccount();
   const { connectAsync, connectors } = useConnect();
-  const { sendTransactionAsync } = useSendTransaction();
+  const { writeContractAsync } = useWriteContract();
   const [state, setState] = useState<TipState>("idle");
   const [message, setMessage] = useState<string | null>(null);
 
@@ -55,10 +69,13 @@ export function BaseTipButton() {
       }
 
       setState("sending");
-      await sendTransactionAsync({
+      const amount = parseUnits("1", BASE_USDC_DECIMALS);
+      await writeContractAsync({
         chainId: base.id,
-        to: TIP_ADDRESS,
-        value: parseEther(TIP_VALUE),
+        address: BASE_USDC_ADDRESS,
+        abi: erc20Abi,
+        functionName: "transfer",
+        args: [TIP_RECIPIENT, amount],
       });
 
       setState("success");
@@ -81,7 +98,7 @@ export function BaseTipButton() {
     handleUnavailable,
     isConnected,
     resetLater,
-    sendTransactionAsync,
+    writeContractAsync,
     t,
   ]);
 

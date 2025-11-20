@@ -2,27 +2,13 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { parseUnits } from "viem";
+import { parseEther } from "viem";
 import { base } from "wagmi/chains";
-import { useAccount, useConnect, useWriteContract } from "wagmi";
+import { useAccount, useConnect, useSendTransaction } from "wagmi";
 
-const TIP_RECIPIENT = "0x86796a14774d06e18f5cb1c67c97f578e30bba02" as const;
-const USDC_BASE_ADDRESS = "0x833589fCD6EDB6e08f4c7C32D4f71b54bDa02913" as const;
-const USDC_DECIMALS = 6;
-const TIP_LINK = `https://pay.base.org/?chain=base&token=${USDC_BASE_ADDRESS}&amount=1&to=${TIP_RECIPIENT}`;
-
-const erc20Abi = [
-  {
-    type: "function",
-    name: "transfer",
-    stateMutability: "nonpayable",
-    inputs: [
-      { name: "to", type: "address" },
-      { name: "value", type: "uint256" },
-    ],
-    outputs: [{ name: "", type: "bool" }],
-  },
-] as const;
+const TIP_ADDRESS = "0x86796a14774d06e18f5cb1c67c97f578e30bba02" as const;
+const TIP_VALUE = "0.001";
+const TIP_LINK = `https://pay.base.org/?to=${TIP_ADDRESS}&chain=base&value=${TIP_VALUE}`;
 
 type TipState = "idle" | "connecting" | "sending" | "success" | "error";
 
@@ -30,7 +16,7 @@ export function BaseTipButton() {
   const t = useTranslations();
   const { isConnected } = useAccount();
   const { connectAsync, connectors } = useConnect();
-  const { writeContractAsync } = useWriteContract();
+  const { sendTransactionAsync } = useSendTransaction();
   const [state, setState] = useState<TipState>("idle");
   const [message, setMessage] = useState<string | null>(null);
 
@@ -69,13 +55,10 @@ export function BaseTipButton() {
       }
 
       setState("sending");
-      const amount = parseUnits("1", USDC_DECIMALS);
-      await writeContractAsync({
+      await sendTransactionAsync({
         chainId: base.id,
-        address: USDC_BASE_ADDRESS,
-        abi: erc20Abi,
-        functionName: "transfer",
-        args: [TIP_RECIPIENT, amount],
+        to: TIP_ADDRESS,
+        value: parseEther(TIP_VALUE),
       });
 
       setState("success");
@@ -98,7 +81,7 @@ export function BaseTipButton() {
     handleUnavailable,
     isConnected,
     resetLater,
-    writeContractAsync,
+    sendTransactionAsync,
     t,
   ]);
 
